@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<aside class="sidebar" th:fragment="sidebar">
+
+    <a th:href="@{/}" class="sidebar-logo">Deepak<span>.</span></a>
+
+    <div class="admin-profile">
+        <div class="profile-icon">DG</div>
+        <div class="profile-info">
+            <strong>Deepak Gupta</strong>
+            <span>Administrator</span>
+        </div>
+    </div>
+
+    <ul>
+
+        <li>
+            <a th:href="@{/admin/dashboard}"
+               th:classappend="${activePage == 'dashboard'} ? 'active' : ''">
+                <i class='bx bxs-dashboard'></i> Dashboard
+            </a>
+        </li>
+
+        <li>
+            <a th:href="@{/admin/projects}"
+               th:classappend="${activePage == 'projects'} ? 'active' : ''">
+                <i class='bx bx-folder-open'></i> Manage Projects
+            </a>
+        </li>
+
+        <li>
+            <a th:href="@{/admin/skills}"
+               th:classappend="${activePage == 'skills'} ? 'active' : ''">
+                <i class='bx bx-code-alt'></i> Manage Skills
+            </a>
+        </li>
+
+        <li>
+            <a th:href="@{/admin/certificates}"
+               th:classappend="${activePage == 'certificates'} ? 'active' : ''">
+                <i class='bx bxs-certification'></i> Manage Certificates
+            </a>
+        </li>
+
+        <li>
+            <a th:href="@{/admin/events}"
+               th:classappend="${activePage == 'events'} ? 'active' : ''">
+                <i class='bx bx-calendar-event'></i> Manage Events
+            </a>
+        </li>
+
+        <li>
+            <a th:href="@{/admin/profile}"
+               th:classappend="${activePage == 'profile'} ? 'active' : ''">
+                <i class='bx bx-user'></i> Manage Profile
+            </a>
+        </li>
+
+        <li>
+            <a th:href="@{/admin/messages}"
+               th:classappend="${activePage == 'messages'} ? 'active' : ''">
+                <i class='bx bx-envelope'></i> Contact Messages
+            </a>
+        </li>
+
+        <li>
+            <a th:href="@{/admin/change-password}"
+               th:classappend="${activePage == 'change-password'} ? 'active' : ''">
+                <i class='bx bx-lock-alt'></i> Change Password
+            </a>
+        </li>
+
+        <li>
+            <a th:href="@{/}">
+                <i class='bx bx-globe'></i> View Portfolio
+            </a>
+        </li>
+
+    </ul>
+
+    <div class="sidebar-divider"></div>
+
+    <form th:action="@{/logout}" method="post">
+        <button type="submit" class="sidebar-logout-btn">
+            <i class='bx bx-log-out'></i> Logout
+        </button>
+    </form>
+
+</aside>
+
+</body>
+</html>

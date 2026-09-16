@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Skills | Admin</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+
+<body>
+
+<div class="admin-container">
+
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="admin-content">
+
+        <div class="admin-header">
+            <div>
+                <h1>Manage Skills</h1>
+                <p>Everything shown in the Skills section of your portfolio.</p>
+            </div>
+
+            <a th:href="@{/admin/skills/add}" class="add-btn">
+                <i class='bx bx-plus'></i> Add Skill
+            </a>
+        </div>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Skill Name</th>
+                    <th>Category</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+
+                <tbody>
+
+                <tr th:each="skill : ${skills}">
+                    <td><span class="id-badge" th:text="${skill.id}">1</span></td>
+                    <td th:text="${skill.name}"></td>
+                    <td th:text="${skill.category}"></td>
+                    <td>
+                        <a th:href="@{/admin/skills/edit/{id}(id=${skill.id})}" class="edit-btn">
+                            <i class='bx bx-edit-alt'></i> Edit
+                        </a>
+
+                        <form th:action="@{/admin/skills/delete/{id}(id=${skill.id})}"
+                              method="post" style="display: inline;"
+                              onsubmit="return confirm('Are you sure you want to delete this skill?')">
+
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+                            <button type="submit" class="delete-btn">
+                                <i class='bx bx-trash'></i> Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+
+                <tr class="empty-row" th:if="${skills == null or #lists.isEmpty(skills)}">
+                    <td colspan="4">No skills yet. Click "Add Skill" to create your first one.</td>
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>
