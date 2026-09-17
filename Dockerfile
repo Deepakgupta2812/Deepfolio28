@@ -1,7 +1,8 @@
 FROM eclipse-temurin:21-jdk AS build
 
 WORKDIR /workspace
-COPY deepak-updated/deepak/deepak/ .
+COPY deepak-updated/deepak/deepak/ ./
+RUN chmod +x ./mvnw
 RUN ./mvnw clean package -DskipTests
 
 FROM eclipse-temurin:21-jre
