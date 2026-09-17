@@ -1,6 +1,7 @@
 services:
   - type: web
-    name: Deepak_Gupta_Portfolio
+    name: deepak-portfolio
+    plan: free
     runtime: docker
     dockerfilePath: ./Dockerfile
     dockerContext: .
