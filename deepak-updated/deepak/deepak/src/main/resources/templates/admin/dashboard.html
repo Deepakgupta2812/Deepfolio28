@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | Deepak Gupta</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+
+<body>
+
+<div class="admin-container">
+
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="admin-content">
+
+        <div class="admin-header">
+
+            <div>
+                <h1>Welcome back, Deepak</h1>
+                <p>Here's what's happening with your portfolio.</p>
+            </div>
+
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="logout-btn">
+                    <i class='bx bx-log-out'></i> Logout
+                </button>
+            </form>
+
+        </div>
+
+        <div class="dashboard-cards">
+
+            <a th:href="@{/admin/projects}" class="dashboard-card">
+                <h3><i class='bx bx-folder-open'></i> Projects</h3>
+                <p class="count" th:text="${projectCount}">0</p>
+                <span>Manage your projects &rarr;</span>
+            </a>
+
+            <a th:href="@{/admin/skills}" class="dashboard-card">
+                <h3><i class='bx bx-code-alt'></i> Skills</h3>
+                <p class="count" th:text="${skillCount}">0</p>
+                <span>Manage your skills &rarr;</span>
+            </a>
+
+            <a th:href="@{/admin/education}" class="dashboard-card">
+                <h3><i class='bx bx-book'></i> Education</h3>
+                <p class="count" th:text="${educationCount}">0</p>
+                <span>Manage education &rarr;</span>
+            </a>
+
+            <a th:href="@{/admin/experience}" class="dashboard-card">
+                <h3><i class='bx bx-briefcase'></i> Experience</h3>
+                <p class="count" th:text="${experienceCount}">0</p>
+                <span>Manage experience &rarr;</span>
+            </a>
+
+            <a th:href="@{/admin/certificates}" class="dashboard-card">
+                <h3><i class='bx bxs-certification'></i> Certificates</h3>
+                <p class="count" th:text="${certificateCount}">0</p>
+                <span>Manage your certificates &rarr;</span>
+            </a>
+
+            <a th:href="@{/admin/messages}" class="dashboard-card">
+                <h3><i class='bx bx-envelope'></i> Messages</h3>
+                <p class="count" th:text="${messageCount}">0</p>
+                <span>View contact messages &rarr;</span>
+            </a>
+
+            <a th:href="@{/admin/events}" class="dashboard-card">
+                <h3><i class='bx bx-calendar-event'></i> Events</h3>
+                <p class="count" th:text="${eventCount}">0</p>
+                <span>Manage event attendance &rarr;</span>
+            </a>
+
+            <a th:href="@{/admin/profile}" class="dashboard-card">
+                <h3><i class='bx bx-user'></i> Profile</h3>
+                <p class="count"><i class='bx bx-image'></i></p>
+                <span>Update details, photo and resume &rarr;</span>
+            </a>
+
+            <div class="dashboard-card">
+                <h3><i class='bx bx-show'></i> Visits</h3>
+                <p class="count" th:text="${visitCount}">0</p>
+                <span>Total portfolio page views</span>
+            </div>
+
+            <div class="dashboard-card">
+                <h3><i class='bx bx-bar-chart-alt-2'></i> Total Items</h3>
+                <p class="count" th:text="${totalCount}">0</p>
+                <span>Total portfolio data</span>
+            </div>
+
+            <a th:href="@{/admin/change-password}" class="dashboard-card">
+                <h3><i class='bx bx-cog'></i> Settings</h3>
+                <p class="count"><i class='bx bx-key'></i></p>
+                <span>Update your password &rarr;</span>
+            </a>
+
+        </div>
+
+        <div class="recent-section">
+
+            <div class="recent-header">
+                <h2>Recent Messages</h2>
+                <a th:href="@{/admin/messages}">View All &rarr;</a>
+            </div>
+
+            <div class="recent-messages">
+
+                <div class="recent-message" th:each="contact : ${recentContacts}">
+
+                    <div>
+                        <h4 th:text="${contact.name}">Name</h4>
+                        <p th:text="${contact.email}">Email</p>
+                        <p class="message-preview" th:text="${#strings.abbreviate(contact.message, 80)}">
+                            Message preview
+                        </p>
+                    </div>
+
+                    <a th:href="@{/admin/messages/{id}(id=${contact.id})}" class="view-message-btn">
+                        View
+                    </a>
+
+                </div>
+
+                <p class="empty-state" th:if="${recentContacts == null or #lists.isEmpty(recentContacts)}">
+                    No messages yet. They'll show up here once visitors contact you.
+                </p>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

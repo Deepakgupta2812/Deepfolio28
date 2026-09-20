@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Project Form | Admin</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+
+<body>
+
+<div class="admin-container">
+
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="admin-content">
+
+        <div class="form-container">
+
+            <h1 th:text="${project.id == null ? 'Add Project' : 'Edit Project'}">Project Form</h1>
+            <p>Fill in the details below — this appears live on your public portfolio.</p>
+
+            <form th:action="@{/admin/projects/save}" th:object="${project}" method="post"
+                  enctype="multipart/form-data">
+
+                <input type="hidden" th:field="*{id}">
+
+                <label>Project Title</label>
+                <input type="text" th:field="*{title}" placeholder="Enter project title" required>
+
+                <label>Category</label>
+                <input type="text" th:field="*{category}" placeholder="Full Stack / Backend / Frontend">
+
+                <label>Short description</label>
+                <textarea th:field="*{description}" rows="3" required
+                          placeholder="One or two lines shown on the project card"></textarea>
+
+                <label>Detailed description</label>
+                <textarea th:field="*{detailedDescription}" rows="6"
+                          placeholder="The full overview shown on the project details page"></textarea>
+
+                <label>Problem statement</label>
+                <textarea th:field="*{problemStatement}" rows="4"
+                          placeholder="What problem does this project solve?"></textarea>
+
+                <label>Solution</label>
+                <textarea th:field="*{solution}" rows="4"
+                          placeholder="How does it solve that problem?"></textarea>
+
+                <label>Key features</label>
+                <textarea th:field="*{features}" rows="6"
+                          placeholder="One feature per line"></textarea>
+                <small class="form-help">Write one feature per line — each line becomes a bullet point.</small>
+
+                <label>Architecture / workflow</label>
+                <textarea th:field="*{architecture}" rows="4"
+                          placeholder="Optional: how the pieces fit together"></textarea>
+
+                <label>Technologies</label>
+                <input type="text" th:field="*{technologies}" placeholder="Java, Spring Boot, MySQL" required>
+                <small class="form-help">Comma separated — each one renders as a tag.</small>
+
+                <label>GitHub URL</label>
+                <input type="url" th:field="*{githubUrl}" placeholder="https://github.com/...">
+                <small class="form-help">Leave blank and the GitHub button will not be shown.</small>
+
+                <label>Live Demo URL</label>
+                <input type="url" th:field="*{liveUrl}" placeholder="https://example.com">
+                <small class="form-help">Leave blank and the Live Demo button will not be shown.</small>
+
+                <label>Display order</label>
+                <input type="number" th:field="*{displayOrder}" placeholder="1">
+                <small class="form-help">Lower numbers appear first. Leave blank to sort last.</small>
+
+                <label>Project screenshot</label>
+                <input type="file" name="image" accept="image/png,image/jpeg,image/webp">
+                <small class="form-help">Optional. PNG, JPG, or WebP up to 5 MB. Uploading a new file replaces the current one.</small>
+
+                <div th:if="${project.hasImage}">
+                    <img th:src="@{/image/project/{id}(id=${project.id})}" alt="Current project screenshot"
+                         class="certificate-preview">
+                    <label class="checkbox-row">
+                        <input type="checkbox" name="removeImage" value="true">
+                        Delete current screenshot
+                    </label>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="submit" class="save-btn">
+                        <i class='bx bx-save'></i> Save Project
+                    </button>
+
+                    <a th:href="@{/admin/projects}" class="cancel-btn">
+                        <i class='bx bx-x'></i> Cancel
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

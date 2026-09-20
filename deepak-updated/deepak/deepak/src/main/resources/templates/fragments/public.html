@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- ============================================================
+     Shared <head> assets for the public site.
+     ============================================================ -->
+<th:block th:fragment="headAssets">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap"
+          rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <!-- Applies the stored theme before first paint so the page
+         never flashes the wrong colours. -->
+    <script>
+        (function () {
+            try {
+                var stored = localStorage.getItem('portfolio-theme');
+                if (stored === 'light' || stored === 'dark') {
+                    document.documentElement.setAttribute('data-theme', stored);
+                    return;
+                }
+            } catch (e) { /* ignore */ }
+            document.documentElement.setAttribute(
+                'data-theme',
+                window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches
+                    ? 'light' : 'dark'
+            );
+        }());
+    </script>
+</th:block>
+
+<!-- ============================================================
+     Sticky, responsive navbar.
+     ============================================================ -->
+<header class="site-header" th:fragment="navbar(homeBase)">
+    <nav class="navbar shell" aria-label="Main navigation">
+
+        <a class="brand" th:href="@{/}" aria-label="Back to home">
+            <span class="brand-mark" aria-hidden="true">D<span>G</span></span>
+            <span th:text="${profile.name}">Deepak Gupta</span>
+        </a>
+
+        <button class="menu-toggle" type="button" aria-label="Toggle navigation"
+                aria-expanded="false" aria-controls="primary-navigation">
+            <span></span><span></span>
+        </button>
+
+        <ul class="nav-links" id="primary-navigation">
+            <!-- homeBase is '' on the home page and '/' elsewhere, so the
+                 same navbar works on the project details page too. -->
+            <li><a th:href="${homeBase} + '#home'" href="#home">Home</a></li>
+            <li><a th:href="${homeBase} + '#about'" href="#about">About</a></li>
+            <li><a th:href="${homeBase} + '#skills'" href="#skills">Skills</a></li>
+            <li><a th:href="${homeBase} + '#education'" href="#education">Education</a></li>
+            <li><a th:href="${homeBase} + '#experience'" href="#experience">Experience</a></li>
+            <li><a th:href="${homeBase} + '#projects'" href="#projects">Projects</a></li>
+            <li><a th:href="${homeBase} + '#certificates'" href="#certificates">Certificates</a></li>
+            <li><a th:href="${homeBase} + '#resume'" href="#resume">Resume</a></li>
+            <li><a th:href="${homeBase} + '#contact'" href="#contact" class="nav-cta">Contact <span aria-hidden="true">↗</span></a></li>
+            <li>
+                <span class="nav-extras">
+                    <a class="icon-button" th:if="${profile.hasGithub}" th:href="${profile.githubUrl}"
+                       target="_blank" rel="noopener" aria-label="GitHub profile">
+                        <i class="bx bxl-github" aria-hidden="true"></i>
+                    </a>
+                    <a class="icon-button" th:if="${profile.hasLinkedin}" th:href="${profile.linkedinUrl}"
+                       target="_blank" rel="noopener" aria-label="LinkedIn profile">
+                        <i class="bx bxl-linkedin" aria-hidden="true"></i>
+                    </a>
+                    <button class="icon-button theme-toggle" type="button" aria-label="Switch to light mode">
+                        <i class="bx bx-moon theme-icon-dark" aria-hidden="true"></i>
+                        <i class="bx bx-sun theme-icon-light" aria-hidden="true"></i>
+                    </button>
+                </span>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<!-- ============================================================
+     Footer.
+     ============================================================ -->
+<footer class="site-footer shell" th:fragment="footer">
+    <div class="footer-top">
+        <div>
+            <a class="brand" th:href="@{/}">
+                <span class="brand-mark" aria-hidden="true">D<span>G</span></span>
+                <span th:text="${profile.name}">Deepak Gupta</span>
+            </a>
+            <p class="footer-tagline" th:text="${profile.headline}">Java &amp; Spring Boot Developer</p>
+        </div>
+
+        <div class="footer-links">
+            <a class="icon-button" th:if="${profile.hasGithub}" th:href="${profile.githubUrl}"
+               target="_blank" rel="noopener" aria-label="GitHub profile">
+                <i class="bx bxl-github" aria-hidden="true"></i>
+            </a>
+            <a class="icon-button" th:if="${profile.hasLinkedin}" th:href="${profile.linkedinUrl}"
+               target="_blank" rel="noopener" aria-label="LinkedIn profile">
+                <i class="bx bxl-linkedin" aria-hidden="true"></i>
+            </a>
+            <a class="icon-button" th:if="${profile.hasEmail}" th:href="'mailto:' + ${profile.email}"
+               aria-label="Send an email">
+                <i class="bx bx-envelope" aria-hidden="true"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <span th:text="'© 2026 ' + ${profile.name} + '. All Rights Reserved.'">© 2026 Deepak Gupta. All Rights Reserved.</span>
+        <a class="back-top" href="#home">Back to top ↑</a>
+    </div>
+</footer>
+
+<!-- ============================================================
+     Reusable project card.
+     ============================================================ -->
+<article class="project-card reveal" th:fragment="projectCard(project)">
+
+    <a th:href="@{/projects/{id}(id=${project.id})}" th:if="${project.hasImage}">
+        <img class="project-thumb" loading="lazy" decoding="async"
+             th:src="@{/image/project/{id}(id=${project.id})}"
+             th:alt="${project.title} + ' screenshot'">
+    </a>
+    <div class="project-thumb-placeholder" th:unless="${project.hasImage}" aria-hidden="true">✦</div>
+
+    <div class="project-body">
+        <span class="project-category"
+              th:if="${project.category != null and !project.category.isEmpty()}"
+              th:text="${project.category}">Full Stack</span>
+
+        <h3 th:text="${project.title}">Project title</h3>
+
+        <p class="project-summary" th:text="${project.description}">Short description</p>
+
+        <ul class="tech-tags" th:if="${project.technologies != null and !project.technologies.isEmpty()}">
+            <li th:each="tech : ${#strings.arraySplit(project.technologies, ',')}"
+                th:text="${#strings.trim(tech)}">Java</li>
+        </ul>
+
+        <div class="project-actions">
+            <a class="primary" th:href="@{/projects/{id}(id=${project.id})}">View details</a>
+
+            <!-- Rendered only when a URL actually exists. -->
+            <a th:if="${project.hasGithub}" th:href="${project.githubUrl}"
+               target="_blank" rel="noopener">GitHub ↗</a>
+
+            <a th:if="${project.hasLiveDemo}" th:href="${project.liveUrl}"
+               target="_blank" rel="noopener">Live Demo ↗</a>
+        </div>
+    </div>
+</article>
+
+<!-- ============================================================
+     Reusable certificate card.
+     ============================================================ -->
+<article class="certificate-card reveal" th:fragment="certificateCard(certificate)">
+
+    <a th:if="${certificate.imageData != null}"
+       th:href="@{/image/certificate/{id}(id=${certificate.id})}"
+       target="_blank" rel="noopener" class="certificate-image-link">
+        <img class="certificate-image" loading="lazy" decoding="async"
+             th:src="@{/image/certificate/{id}(id=${certificate.id})}"
+             th:alt="${certificate.title} + ' certificate'">
+    </a>
+
+    <div th:unless="${certificate.imageData != null}" class="certificate-image certificate-placeholder">
+        <span class="certificate-icon" aria-hidden="true">✦</span>
+    </div>
+
+    <h3 th:text="${certificate.title}">Certificate title</h3>
+
+    <p>
+        <span th:text="${certificate.organization}">Organization</span><br>
+        <small th:if="${certificate.issueDate != null}"
+               th:text="${certificate.issueDate}">Issue date</small>
+    </p>
+
+    <a class="text-link" target="_blank" rel="noopener"
+       th:if="${certificate.credentialUrl != null and !certificate.credentialUrl.isEmpty()}"
+       th:href="${certificate.credentialUrl}">View Certificate <span aria-hidden="true">↗</span></a>
+</article>
+
+<!-- ============================================================
+     Alert box, shared by the public form and the admin panel.
+     ============================================================ -->
+<div th:fragment="alert(type, message)" th:class="'alert alert-' + ${type}" role="status">
+    <span th:text="${message}">Message</span>
+</div>
+
+<!-- ============================================================
+     Popup (toast) notification. type is "success" or "error".
+     Errors use role="alert" so screen readers announce them at once;
+     main.js handles the auto-dismiss, hover-pause and close button.
+     ============================================================ -->
+<div th:fragment="toast(type, title, message)"
+     th:class="'toast toast-' + ${type}"
+     th:attr="role=${type == 'error' ? 'alert' : 'status'}"
+     data-toast>
+    <span class="toast-icon" aria-hidden="true">
+        <i th:class="${type == 'success' ? 'bx bx-check-circle' : 'bx bx-error-circle'}"></i>
+    </span>
+    <div class="toast-body">
+        <strong th:text="${title}">Title</strong>
+        <p th:text="${message}">Message</p>
+    </div>
+    <button type="button" class="toast-close" aria-label="Dismiss notification" data-toast-close>
+        <i class="bx bx-x" aria-hidden="true"></i>
+    </button>
+    <span class="toast-timer" aria-hidden="true"></span>
+</div>
+
+</body>
+</html>

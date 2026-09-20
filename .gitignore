@@ -1,0 +1,10 @@
+.idea/
+*.iml
+.vscode/
+**/target/
+*.log
+
+# Local, untracked config (DB password, admin password)
+application-local.properties
+src/main/resources/application-local.properties
+.env

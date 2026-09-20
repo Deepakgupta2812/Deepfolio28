@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Skill Form | Admin</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+
+<body>
+
+<div class="admin-container">
+
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="admin-content">
+
+        <div class="form-container">
+
+            <h1 th:text="${skill.id == null ? 'Add Skill' : 'Edit Skill'}">Skill Form</h1>
+            <p>This appears as a card in the Skills section of your portfolio.</p>
+
+            <form th:action="@{/admin/skills/save}" th:object="${skill}" method="post">
+
+                <input type="hidden" th:field="*{id}">
+
+                <label>Skill Name</label>
+                <input type="text" th:field="*{name}" placeholder="Enter skill name" required>
+
+                <label>Category</label>
+                <input type="text" th:field="*{category}" placeholder="Example: Backend, Database, Tools" required>
+
+                <div class="form-buttons">
+                    <button type="submit" class="save-btn">
+                        <i class='bx bx-save'></i> Save Skill
+                    </button>
+
+                    <a th:href="@{/admin/skills}" class="cancel-btn">
+                        <i class='bx bx-x'></i> Cancel
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

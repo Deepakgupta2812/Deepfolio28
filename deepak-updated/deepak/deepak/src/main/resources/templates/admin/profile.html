@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Profile | Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+<div class="admin-container">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="admin-content">
+
+        <div class="profile-stats">
+            <div class="stat-box">
+                <p class="count" th:text="${visitCount}">0</p>
+                <span><i class='bx bx-show'></i> Total profile visits</span>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <h1>Manage Profile</h1>
+            <p>Everything here is loaded dynamically by the public portfolio.</p>
+
+            <form th:action="@{/admin/profile/save}" th:object="${profile}" method="post"
+                  enctype="multipart/form-data">
+
+                <h2 class="form-section-title">Identity</h2>
+
+                <label>Name</label>
+                <input type="text" th:field="*{name}" required>
+
+                <label>Headline</label>
+                <input type="text" th:field="*{headline}" required
+                       placeholder="Java &amp; Spring Boot Developer">
+
+                <label>Hero text</label>
+                <textarea th:field="*{heroText}" rows="3"
+                          placeholder="Short line shown directly under your name in the hero section"></textarea>
+
+                <label>About text</label>
+                <textarea th:field="*{aboutText}" rows="6"
+                          placeholder="The longer introduction shown in the About section"></textarea>
+
+                <label>Bio (fallback)</label>
+                <textarea th:field="*{bio}" rows="4"
+                          placeholder="Used when hero text or about text is empty"></textarea>
+
+                <h2 class="form-section-title">Contact &amp; links</h2>
+
+                <label>Email</label>
+                <input type="email" th:field="*{email}" placeholder="you@example.com">
+
+                <label>Phone</label>
+                <input type="text" th:field="*{phone}" placeholder="+91 ...">
+
+                <label>Location</label>
+                <input type="text" th:field="*{location}" placeholder="Lucknow, India">
+
+                <label>GitHub URL</label>
+                <input type="url" th:field="*{githubUrl}" placeholder="https://github.com/username">
+
+                <label>GitHub username</label>
+                <input type="text" th:field="*{githubUsername}" placeholder="username">
+
+                <label>LinkedIn URL</label>
+                <input type="url" th:field="*{linkedinUrl}" placeholder="https://linkedin.com/in/username">
+
+                <h2 class="form-section-title">Media</h2>
+
+                <label>Profile image</label>
+                <input type="file" name="image" accept="image/png,image/jpeg,image/webp">
+                <small class="form-help">Optional. PNG, JPG, or WebP up to 5 MB.</small>
+
+                <div th:if="${profile.imageData != null}">
+                    <img th:src="@{/image/profile}" alt="Current profile" class="certificate-preview">
+                    <label class="checkbox-row">
+                        <input type="checkbox" name="removeImage" value="true">
+                        Delete current profile image
+                    </label>
+                </div>
+
+                <label>Profile text color</label>
+                <div class="color-picker-row">
+                    <input type="color" class="color-picker" th:field="*{textColor}">
+                    <small class="form-help">Kept for backwards compatibility with the previous design.</small>
+                </div>
+
+                <h2 class="form-section-title" id="resume">Resume</h2>
+
+                <label>Resume (PDF)</label>
+                <input type="file" name="resume" accept="application/pdf">
+                <small class="form-help"
+                       th:text="${profile.resumeFileName != null ? 'Current file: ' + profile.resumeFileName : 'Optional. PDF up to 5 MB.'}"></small>
+
+                <label>External resume URL</label>
+                <input type="url" th:field="*{resumeUrl}" placeholder="https://drive.google.com/...">
+                <small class="form-help">Used only when no PDF has been uploaded.</small>
+
+                <div class="form-buttons">
+                    <button type="submit" class="save-btn"><i class='bx bx-save'></i> Save Profile</button>
+                    <a th:href="@{/}" class="cancel-btn"><i class='bx bx-globe'></i> View Portfolio</a>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+</body>
+</html>

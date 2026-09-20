@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Education | Admin</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+
+<body>
+
+<div class="admin-container">
+
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="admin-content">
+
+        <div class="admin-header">
+            <div>
+                <h1>Manage Education</h1>
+                <p>Shown as a timeline in the Education section of your portfolio.</p>
+            </div>
+
+            <a th:href="@{/admin/education/add}" class="add-btn">
+                <i class='bx bx-plus'></i> Add Education
+            </a>
+        </div>
+
+        <div class="admin-alert admin-alert-success" th:if="${success}" th:text="${success}"></div>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Degree</th>
+                    <th>Institution</th>
+                    <th>Period</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+
+                <tbody>
+
+                <tr th:each="education : ${educationList}">
+                    <td><span class="id-badge" th:text="${education.id}">1</span></td>
+                    <td th:text="${education.degree}"></td>
+                    <td th:text="${education.institution}"></td>
+                    <td th:text="${education.period}"></td>
+                    <td>
+                        <a th:href="@{/admin/education/edit/{id}(id=${education.id})}" class="edit-btn">
+                            <i class='bx bx-edit-alt'></i> Edit
+                        </a>
+
+                        <form th:action="@{/admin/education/delete/{id}(id=${education.id})}"
+                              method="post" style="display: inline;"
+                              onsubmit="return confirm('Delete this education entry?')">
+
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+                            <button type="submit" class="delete-btn">
+                                <i class='bx bx-trash'></i> Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+
+                <tr class="empty-row" th:if="${educationList == null or #lists.isEmpty(educationList)}">
+                    <td colspan="5">No education entries yet. The section stays hidden on the public site until you add one.</td>
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>
